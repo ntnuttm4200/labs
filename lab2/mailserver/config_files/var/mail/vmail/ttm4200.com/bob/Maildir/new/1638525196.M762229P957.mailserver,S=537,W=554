@@ -1,0 +1,17 @@
+Return-Path: <murad@ttm4200.com>
+Delivered-To: bob@ttm4200.com
+Received: from mailserver (localhost [IPv6:::1])
+	by 295bf6b316ed.wlan.ntnu.no (Postfix) with ESMTP id B0B23102196
+	for <bob@ttm4200.com>; Fri,  3 Dec 2021 10:53:16 +0100 (CET)
+To: bob@ttm4200.com
+From: murad@ttm4200.com
+Subject: Welcome
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Message-Id: <20211203095316.B0B23102196@295bf6b316ed.wlan.ntnu.no>
+Date: Fri,  3 Dec 2021 10:53:16 +0100 (CET)
+
+Hi,
+
+Welcome to your new account.
