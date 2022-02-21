@@ -23,7 +23,7 @@ We will use a Github repository for all labs materials during this course.
     git pull origin main --no-edit
     ```
     
-* You might need to set your username/email when commit to your local repository:
+* You might need to set your username/email when commiting to your local repository for the first time:
 
     ```bash
     git config --global user.name "FIRST_NAME LAST_NAME"
