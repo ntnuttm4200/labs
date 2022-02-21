@@ -22,3 +22,10 @@ We will use a Github repository for all labs materials during this course.
     git commit -m "message describing local changes"
     git pull origin main --no-edit
     ```
+    
+* You might need to set your username/email when commit to your local repository:
+
+    ```bash
+    git config --global user.name "FIRST_NAME LAST_NAME"
+    git config --global user.email "YOUR EMAIL"
+    ```
