@@ -1,0 +1,214 @@
+version: '2.3'
+# ********************** Networks *****************
+networks:
+  ttm4200_public_net:
+    ipam: 
+      config:
+        - subnet: 129.100.1.0/29
+  
+  private_net1:
+    ipam: 
+      config:
+        - subnet: 10.20.40.0/24
+
+  private_net2:
+    ipam: 
+      config:
+        - subnet: 10.20.50.0/24
+  link0:
+    ipam: 
+      config:
+        - subnet: 129.168.1.0/29
+  link1:
+    ipam: 
+      config:
+        - subnet: 129.168.1.8/29
+
+  link2:
+    ipam: 
+      config:
+        - subnet: 129.168.1.16/29
+  link3:
+    ipam: 
+      config:
+        - subnet: 129.168.1.24/29
+
+services:
+    base:
+        image: ttm4200_base:v1
+        build:
+            context: ./ttm4200_base
+            dockerfile: Dockerfile
+            args:
+                USER_ID: ${USER_ID:-1000}
+                GROUP_ID: ${GROUP_ID:-1000}
+
+    dnsserver:
+        build: ./dnsserver
+        depends_on:
+            - "base"
+        container_name: dnsserver
+        hostname: dnsserver
+        stdin_open: true 
+        tty: true 
+        ports:
+            - "127.0.0.1:2000:${SSH_PORT:-22}"
+        volumes:
+            - ./dnsserver/:/home/ttm4200/work_dir
+        cap_add:
+            - NET_ADMIN
+        networks:
+            ttm4200_public_net:
+                ipv4_address: 129.100.1.2
+
+    webserver:
+        image: ttm4200_webserver:v1
+        build: ./webserver
+        depends_on:
+            - "base"
+        container_name: webserver
+        hostname: webserver
+        stdin_open: true
+        tty: true
+        ports:
+            - "127.0.0.1:3000:${SSH_PORT:-22}"
+            - "127.0.0.1:80:80"
+        volumes:
+            - ./webserver/:/home/ttm4200/work_dir
+        cap_add:
+            - NET_ADMIN
+        networks:
+            ttm4200_public_net:
+                ipv4_address: 129.100.1.3
+
+
+    router0:
+        image: ttm4200_router:v1
+        build: ./router0 
+        depends_on:
+            - "base"
+        container_name: router0
+        hostname: router0
+        stdin_open: true
+        tty: true
+        ports:
+            - "127.0.0.1:9000:${SSH_PORT:-22}"
+        volumes:
+            - ./router0/:/home/ttm4200/work_dir
+        cap_add:
+            - NET_ADMIN
+            - SYS_ADMIN
+        networks:
+            ttm4200_public_net:
+                ipv4_address: 129.100.1.5
+            link0:
+                ipv4_address: 129.168.1.2
+            link3:
+                ipv4_address: 129.168.1.26
+                
+    router1:
+        image: ttm4200_router:v1
+        depends_on:
+            - "router0"
+        container_name: router1
+        hostname: router1
+        stdin_open: true
+        tty: true
+        ports:
+            - "127.0.0.1:10000:${SSH_PORT:-22}"
+        volumes:
+            - ./router1/:/home/ttm4200/work_dir
+        cap_add:
+            - NET_ADMIN
+            - SYS_ADMIN
+        networks:
+            private_net1:
+                ipv4_address: 10.20.40.100
+            link1:
+                ipv4_address: 129.168.1.10
+            link3:
+                ipv4_address: 129.168.1.27
+                
+    router2:
+        image: ttm4200_router:v1
+        depends_on:
+            - "router0"
+        container_name: router2
+        hostname: router2
+        stdin_open: true
+        tty: true
+        ports:
+            - "127.0.0.1:20000:${SSH_PORT:-22}"
+        volumes:
+            - ./router2/:/home/ttm4200/work_dir
+        cap_add:
+            - NET_ADMIN
+            - SYS_ADMIN
+        networks:
+            private_net2:
+                ipv4_address: 10.20.50.100
+            link2:
+                ipv4_address: 129.168.1.18
+    
+    router3:
+        image: ttm4200_router:v1
+        depends_on:
+            - "router0"
+        container_name: router3
+        hostname: router3
+        stdin_open: true
+        tty: true
+        ports:
+            - "127.0.0.1:30000:${SSH_PORT:-22}"
+        volumes:
+            - ./router3/:/home/ttm4200/work_dir
+        cap_add:
+            - NET_ADMIN
+            - SYS_ADMIN
+        networks:
+            link0:
+                ipv4_address: 129.168.1.3
+
+            link1:
+                ipv4_address: 129.168.1.11
+
+            link2:
+                ipv4_address: 129.168.1.19
+
+
+
+    pclient1:
+        image: ttm4200_base:v1 
+        depends_on:
+            - "base"
+        container_name: pclient1
+        hostname: pclient1
+        stdin_open: true
+        tty: true
+        ports:
+            - "127.0.0.1:41000:${SSH_PORT:-22}" 
+        volumes:
+            - ./pclient1/:/home/ttm4200/work_dir
+        cap_add:
+            - NET_ADMIN
+        networks:
+            private_net1:
+                ipv4_address: 10.20.40.41
+
+    pclient2:
+        image: ttm4200_base:v1 
+        depends_on:
+            - "base"
+        container_name: pclient2
+        hostname: pclient2
+        stdin_open: true
+        tty: true
+        ports:
+            - "127.0.0.1:51000:${SSH_PORT:-22}"
+        volumes:
+            - ./pclient2/:/home/ttm4200/work_dir
+        cap_add:
+            - NET_ADMIN
+        networks:
+            private_net2:
+                ipv4_address: 10.20.50.51
