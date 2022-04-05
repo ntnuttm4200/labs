@@ -22,17 +22,15 @@ fi
  if [ -f "/etc/ssl/private/ttm4200-selfsigned.key" ]; then
      echo "Saving /etc/ssl/private/ttm4200-selfsigned.key"
      cp --backup=t /etc/ssl/private/ttm4200-selfsigned.key /home/ttm4200/work_dir/config_files/etc/ssl/private/ttm4200-selfsigned.key
-     chmod -R go+xr /etc/ssl/
  fi
- 
+
  if [ -f "/etc/ssl/certs/ttm4200-selfsigned.crt" ]; then
      echo "Saving /etc/ssl/certs/ttm4200-selfsigned.crt"
      cp --backup=t /etc/ssl/certs/ttm4200-selfsigned.crt /home/ttm4200/work_dir/config_files/etc/ssl/certs/ttm4200-selfsigned.crt
-     chmod -R go+xr /etc/ssl/
  fi
- 
+
  if [ -f "/etc/ssl/certs/dhparam.pem" ]; then
      echo "Saving /etc/ssl/certs/dhparam.pem"
      cp --backup=t /etc/ssl/certs/dhparam.pem /home/ttm4200/work_dir/config_files/etc/ssl/certs/dhparam.pem
-     chmod -R go+xr /etc/ssl/
  fi
+ chmod -R a+rwx /home/ttm4200/work_dir/config_files/
