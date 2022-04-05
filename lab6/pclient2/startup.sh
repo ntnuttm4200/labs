@@ -11,6 +11,7 @@ fi
 
 if [ -f "/home/ttm4200/work_dir/config_files/wg0.conf" ]; then
      cp /home/ttm4200/work_dir/config_files/wg0.conf /etc/wireguard/wg0.conf
+     wg-quick up /etc/wireguard/wg0.conf
 fi
 
 source ~/.bashrc
